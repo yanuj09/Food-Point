@@ -46,13 +46,24 @@ const Header= () =>{
                     <li className="px-4">
                         <Link to= "/contact"> Contact Us </Link> 
                     </li>
-                    
-                    <li className="px-4 font-bold"> 
-                        <Link to= "/cart"> Cart ({cartItems.length}) </Link>
-                    </li>
-                
 
-                    <li  className="px-4 font-bold">{loggedInUser}</li>
+                    <span className="flex h-5">
+                        <Link to= "/cart">
+                        <span className="font-bold  absolute ml-5 text-gray-600 "> 
+                            {cartItems.length} 
+                        </span> 
+                        <img className=" px-2 w-14 h-7 " src="https://img.icons8.com/?size=100&id=QVQY51sDgy1I&format=png&color=000000"></img>
+                        
+                        </Link>
+                    </span>
+                    
+
+                    <div className="flex">
+                        <img className=" pl-4 w-14 h-7  " src="https://img.icons8.com/?size=100&id=22396&format=png&color=000000"></img>
+                        <li  className=" font-bold"> {loggedInUser}</li>
+                    </div>
+                
+                    
                 </ul>
            </div>
         </div>

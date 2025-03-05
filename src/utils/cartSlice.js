@@ -8,7 +8,7 @@ const cartSlice = createSlice({
     initialState: {
         item : [],
     },
-
+ 
     // ==> reducerssss  becoz it contain many  reducer
     reducers: {
         addItem: (state, action) =>{

@@ -11,7 +11,7 @@ import UserContext from "./utils/UserContext";
 import { Provider } from "react-redux";  // to use appstore , it the component
 import appStore from "./utils/appstore";
 import Cart from "./components/Cart";
-import Footer from "./components/Footer";
+import Footer from "./components/Footer"; 
 
 
 

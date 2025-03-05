@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import ItemList from "./ItemList";
 import { useDispatch } from "react-redux";
 import { clearCart } from "../utils/cartSlice";
+import CartItems from "./CartItems";
 
 
 
@@ -32,7 +33,8 @@ const Cart = ()=>{
                 {cartItems.length === 0 && <h5>Your Cart is Empty</h5>}
 
                 {/* Displaying the added item card into the card reusing the itemlist components */}
-                <ItemList items= {cartItems}></ItemList>  
+                {/* <CartItems items= {cartItems}></CartItems>   */}
+                <ItemList items = {cartItems}/>
             </div>
 
             

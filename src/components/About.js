@@ -14,7 +14,7 @@ class About extends Component{
         //console.log("Parent ComponentDidMount");
     }
 
-    componentWillUnmount(){
+    componentWillUnmount(){   
         //=>called when we're leaving the component
         //console.log(`8. Parent's will unmount.`);
     }//componentWillUnmount

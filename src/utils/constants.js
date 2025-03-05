@@ -4,6 +4,8 @@ export const LOGO_URL ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN
 
 export const SWIGGY_API = "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9352403&lng=77.624532&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
 
+export const SWIGGY_UPDATE = "https://www.swiggy.com/dapi/restaurants/list/update";
+
 export const SWIGGY_RES_MENU = "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complhttps://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9352403&lng=77.624532&catalog_qa=undefined&restaurantId=";
 
 // social media logo

@@ -1,7 +1,7 @@
 import RestaurantCard  from "./RestaurantCard";
 import Shimmer from "./shimmer.js"
 import {useState, useEffect, useContext} from "react";
-import { SWIGGY_API } from "../utils/constants.js";
+import { SWIGGY_API, SWIGGY_UPDATE } from "../utils/constants.js";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus.js";
 import UserContext from "../utils/UserContext.js";
@@ -16,24 +16,15 @@ const Body = () =>{
     // State Variable -  Super powerful Variable
     const [listOfRestaurants, setlistOfRestaurants] = useState([]);
     const [filteredRestaurants, setfilteredRestaurants] = useState([]);
+    const[offset, setOffset] = useState(8); // Pagination offset (starting after the first 20)
+    const[loading, setLoading] = useState(false); // to prevent duplicate api call
+    const [hasMore, setHasMore] = useState(true); // Check if more data exists
+    const Limit = 8; // number of restaurant fetch per request;
+
     
     
     const [searchText , setsearchText] = useState("");
 
-   
-
-    
-
-
-    /*
-    //same as above lline
-    const arr = useState(resList);
-    const [listOfRestaurants, setlistOfRestaurants] = arr;
-
-    const listOfRestaurants = arr[0];
-    const setlistOfRestaurants = arr[1];
-
-    */
 
 
     // Rerender the card data after fetching the data
@@ -54,6 +45,74 @@ const Body = () =>{
       
       
     }
+
+
+    // logic for lazy laoding of restaurant updata api
+
+    // logic for handling scroll
+    
+    
+    useEffect( () =>{
+
+      const handleScroll = () =>{
+        const scrollTop = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const fullHeight = document.documentElement.scrollHeight;
+        const footer = document.querySelector("footer"); // Get the footer element
+        const footerOffset = footer ? footer.offsetTop : 500; // Get the footer's position
+        
+  
+        if(scrollTop + viewportHeight >= fullHeight-200 && !loading && hasMore ){
+          fetchMoreData();
+        }
+
+        if(scrollTop + viewportHeight >= footerOffset && !loading && hasMore){
+          setHasMore(false);
+        }
+        
+      };
+
+      window.addEventListener("scroll" , handleScroll);
+
+      return () =>{
+        window.removeEventListener("scroll" , handleScroll);
+      };
+     
+    },[loading,hasMore]);
+
+    const fetchMoreData = async () =>{
+
+      setLoading(true);
+
+      try{
+        const moreData = await fetch(SWIGGY_API);
+
+        const response = await moreData.json();
+
+        const newRestaurant = response?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+
+        console.log(response);
+        setfilteredRestaurants((prev) => [...prev,...newRestaurant]);
+      }
+      catch(error){
+        console.error("Error fetching data" , error);
+      }
+      finally{
+        setLoading(false);
+      }
+      
+    };
+
+    
+
+
+
+
+
+
+
+
+    // lazy loading ends
 
     // fetching the online status info
     const onlineStatus = useOnlineStatus(); 
@@ -126,12 +185,12 @@ const Body = () =>{
 
 
                 {/* userName updating/overwritting the context data  */}
-                <div className=" m-4 p-4 flex items-center">
+                {/* <div className=" m-4 p-4 flex items-center">
                   <label>UserName :</label>
                   <input className="border border-black px-1 m-2" value = {loggedInUser} 
                     onChange={(e) => setUserName(e.target.value)  //changing the context data
                   }></input>
-                </div>
+                </div> */}
 
             
 
@@ -139,8 +198,8 @@ const Body = () =>{
             
             {/* Displayint restaurant cards */}
             <div className="flex flex-wrap ml-[9rem] mr-24">
-                {filteredRestaurants.map((restaurants) => (
-                    <Link key= {restaurants?.info?.id  } to={"/restaurants/" + restaurants?.info?.id}>
+                {filteredRestaurants.map((restaurants,index) => (
+                    <Link key= {index} to={"/restaurants/" + restaurants?.info?.id}>
 
                      <RestaurantCard  resData = {restaurants}/>
                       

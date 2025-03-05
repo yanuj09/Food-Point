@@ -5,6 +5,7 @@ import { useState } from "react";
 // It is the controlled component . It is controlled by RestaurantMenu.js
 const RestaurantCategory = ({data, showItem , setShowIndex})=>{
 
+
     //[showItem, setShowItem] = useState(false); // the accordian is closed or opened
 
     // function to make the occordian toggle 

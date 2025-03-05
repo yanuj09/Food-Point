@@ -3,6 +3,7 @@ import Shimmer from "./shimmer";
 import { useParams } from "react-router-dom";
 import RestaurantCategory from "./RestaurantCategory";
 import useRestaurantMenu from "../utils/useRestaurantMenu";
+import ItemList from "./ItemList";
 
 const RestaurantMenu = ()=>{
    
@@ -13,9 +14,10 @@ const RestaurantMenu = ()=>{
 
     const [showIndex, setShowIndex] = useState(0);  // variable to shore the index of the clicked occordian (basically used to which category is needed to show their body)
     
-    const [searchDishes, setSearchDishes] = useState("");
-    const [filterResult, setFilterResult] = useState("");
+    const [searchDishes, setSearchDishes] = useState(""); // search input value
+    const [filterResult, setFilterResult] = useState(""); // filtered dishes
     console.log(filterResult);
+    //console.log(searchDishes);
     
     
 
@@ -90,9 +92,16 @@ const RestaurantMenu = ()=>{
                 </input>
                 <button className="bg-green-100 p-1 ml-1 rounded-md"
                 onClick={() =>{
-                    const filterDish = allDishes.filter((dish)=>
+                    const filterDish = allDishes.filter((dish)=>{
+
+                        return (
+                            dish?.card?.info?.name.toLowerCase().includes(searchDishes.toLowerCase()) ||
+                             dish?.card?.info?.category.toLowerCase().includes(searchDishes.toLowerCase()) ||
+                             dish?.card?.info?.description.toLowerCase().includes(searchDishes.toLowerCase())
+                        )
+                    }
                         
-                            dish?.card?.info?.name.toLowerCase().includes(searchDishes.toLowerCase())
+                            
                     )
                     //console.log(filterDish);
                     setFilterResult(filterDish);
@@ -103,17 +112,68 @@ const RestaurantMenu = ()=>{
                 }}
 
                 >Search</button>
+
                 
-                <button className="ml-5 border border-solid rounded-xl px-2 ">veg</button>
-                <button className="ml-5 border border-solid rounded-xl px-2">non-veg</button>
-                <button className="ml-5 border border-solid rounded-xl px-2">Bestseller</button>
+                
+                <button className="ml-5 border border-solid rounded-xl px-2 "
+                    onClick={() =>{
+                        const vegMenu = allDishes.filter((dish)=> dish.card.info?.itemAttribute?.vegClassifier === "VEG")
+                        console.log(vegMenu);
+                    }}
+                >veg</button>
+                <button className="ml-5 border border-solid rounded-xl px-2"
+                    onClick={() =>{
+                        const vegMenu = allDishes.filter((dish)=> dish.card.info?.itemAttribute?.vegClassifier === "NONVEG")
+                        console.log(vegMenu);
+                    }}
+                >non-veg</button>
+                <button className="ml-5 border border-solid rounded-xl px-2"
+                onClick={
+                    ()=>{
+                        const bestSeller = allDishes.filter( (dish) =>{
+                            return (
+                                dish?.card?.info?.isBestseller === true
+                            )
+                        })
+                        //console.log(bestSeller);
+                        setFilterResult(bestSeller);
+                    }
+                }
+                
+                >Bestseller</button>
             </section>
             <hr/>
 
             {/* Categoris accordian */}
 
+            {
+                searchDishes.length > 0  && filterResult != 0 ? (
+
+
+                        <ItemList items = {filterResult}/>
+                    
+                    
+                    
+                
+                ):
+                (
+                    categories.map((category, index)=>
+                        (
+                            //controlling componeent
+                            <RestaurantCategory 
+                                key={category?.card?.card?.title} 
+                                data= {category?.card?.card}
+                                showItem= {index== showIndex && true}  // the index which is true is to be show their occordian body
+                                
+                                setShowIndex={()=>setShowIndex(index)} //get the index of the category which is clicked to show
+                            />
+                        )
+                    )
+                )
+            }
+
             
-            {categories.map((category, index)=>
+            {/* {categories.map((category, index)=>
                 (
                     //controlling componeent
                     <RestaurantCategory 
@@ -124,7 +184,7 @@ const RestaurantMenu = ()=>{
                         setShowIndex={()=>setShowIndex(index)} //get the index of the category which is clicked to show
                     />
                 )
-            )}
+            )} */}
             
             
             
